@@ -136,7 +136,7 @@ export const ModelConfig = ({
             name="model_provider"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Model Provider</FormLabel>
+                <FormLabel>Model Provider <b>(Intercepted)</b></FormLabel>
                 <FormControl>
                   <Select
                     defaultValue={form.getValues().model_provider ?? "openai"}

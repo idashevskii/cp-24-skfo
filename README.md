@@ -35,9 +35,3 @@ https://cp-24-skfo.open-core.ru/ui
 ## Architecture
 
 ![img_2.png](img_2.png)
-
-## Автоматический парсер
-https://github.com/Nizier193/05-07-Hackatone-Parser
-
-## TgBot 
-https://github.com/Nizier193/05-07-Hackatone-TGBot
