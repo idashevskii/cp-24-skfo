@@ -23,20 +23,22 @@ Run services in prod mode:
 ./bin/prod-run.sh
 ```
 ## Automatic Parser
-https://github.com/Nizier193/05-07-Hackatone-Parser
+Репозиторий: https://github.com/Nizier193/cp-24-skfo-parser
 
 ## TgBot
-https://t.me/rustore_manager_bot
+Демо: https://t.me/rustore_manager_bot
+
+Репозиторий: https://github.com/Nizier193/cp-24-skfo-tg-bot
 
 ## Admin Page
-https://cp-24-skfo.open-core.ru/admin
+Демо: https://cp-24-skfo.open-core.ru/admin
 
-![img.png](img.png)
+![img_1.png](docs/images/img_1.png)
 ## User Page
-https://cp-24-skfo.open-core.ru/ui
+Демо: https://cp-24-skfo.open-core.ru/ui
 
-![img.png](img.png)
+![img.png](docs/images/img.png)
 
 ## Architecture
 
-![img_1.png](img_1.png)
+![img_2.png](docs/images/img_2.png)
