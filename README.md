@@ -22,6 +22,8 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
+## Прозрачность кода
+
 ## Automatic Parser
 https://github.com/Nizier193/05-07-Hackatone-Parser
 
