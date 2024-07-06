@@ -1,0 +1,118 @@
+x-logging: &logging
+  options:
+    max-size: "256k"
+    max-file: "1"
+  driver: json-file
+
+services:
+
+  reverse-proxy:
+    restart: always
+    build:
+      context: ./services/reverse-proxy
+    environment:
+      - UI_BASE_URI=$UI_BASE_URI
+      - ADMIN_UI_BASE_URI=$ADMIN_UI_BASE_URI
+      - API_BASE_URI=$API_BASE_URI
+    ports:
+      - "${HOST_IP}:80:80"
+      - "${HOST_IP}:443:443"
+    volumes:
+      - certbot-dist:/etc/letsencrypt/:ro
+      - certbot-www:/var/www/certbot:ro
+    logging: *logging
+
+  ui:
+    build:
+      context: ./services/ui
+      network: host
+      args:
+        - BASE_URI=$UI_BASE_URI
+    restart: always
+    logging: *logging
+    networks:
+      default:
+        ipv4_address: "172.25.1.101"
+    environment:
+      - API_BASE_URI=$API_BASE_URI
+
+  admin-ui:
+    build:
+      context: ./services/admin-ui
+      network: host
+      args:
+        - BASE_URI=$ADMIN_UI_BASE_URI
+    restart: always
+    logging: *logging
+    networks:
+      default:
+        ipv4_address: "172.25.1.102"
+    environment:
+      - API_BASE_URI=$API_BASE_URI
+
+  backend:
+    build:
+      context: ./services/backend
+      network: host
+    restart: always
+    volumes:
+      - backend-data:/app/data
+    environment:
+      - OPENAI_BASE_URL=$OPENAI_BASE_URL
+      - OPENAI_API_BASE=$OPENAI_API_BASE
+      - VECTOR_STORE_PROVIDER=qdrant
+      - QDRANT_URL=$QDRANT_URL
+      - QDRANT_COLLECTION=default
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+    depends_on:
+      - setup
+    logging: *logging
+    networks:
+      default:
+        ipv4_address: "172.25.1.103"
+
+  setup:
+    image: curlimages/curl:8.8.0
+    restart: 'no'
+    volumes:
+      - ./scripts:/ragapp
+    environment:
+      - MODEL=${MODEL:-phi3:latest}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
+      - QDRANT_URL=$QDRANT_URL
+      - COLLECTION_NAME=default
+      - DISTANCE_METRIC=Cosine
+      - VECTOR_SIZE=768
+    command: >
+      /bin/sh -c 
+      "/ragapp/create_qdrant_collection.sh &&
+      /ragapp/setup_ollama.sh"
+
+  certbot:
+    restart: always
+    build:
+      context: ./services/certbot
+    volumes:
+      - certbot-dist:/etc/letsencrypt/:rw
+      - certbot-www:/var/www/certbot:rw
+    environment:
+      - DOMAINS=$DOMAIN_NAME
+      - EMAIL=$CERTBOT_EMAIL
+      - CERT_MODE=prod
+    logging: *logging
+
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.25.0.0/16"
+          gateway: "172.25.0.1"
+
+volumes:
+  backend-data:
+  certbot-dist:
+  certbot-www:
+  postgres-data:

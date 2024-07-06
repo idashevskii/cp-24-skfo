@@ -1,0 +1,35 @@
+services:
+
+  ui:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/ui:/app
+      - dev-node-cache:/root
+
+  admin-ui:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/admin-ui:/app
+      - dev-node-cache:/root
+
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/backend:/app
+    ports:
+      - "15678:5678" # debugger
+
+  certbot:
+    restart: "no"
+    entrypoint: ["echo", "Service disabled"]
+    deploy:
+      replicas: 0
+    environment:
+      - CERT_MODE=staging
+
+
+volumes:
+  dev-node-cache:
