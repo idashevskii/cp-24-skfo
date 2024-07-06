@@ -55,7 +55,7 @@ export function ChatSources({ data }: { data: SourceData }) {
 
   const links=sources.map((nodeInfo: NodeInfo, index: number) => {
     if (nodeInfo.document_url){
-      return <div className="mb-1 ml-0 text-sm">
+      return <div className="mb-1 ml-0 text-sm" key={index}>
         <a className="underline" target="_blank" href={nodeInfo.document_url}>{nodeInfo.document_title||nodeInfo.document_url}</a>
       </div>
     }
