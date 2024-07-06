@@ -1,3 +1,6 @@
+Based on [RAGapp](https://github.com/ragapp/ragapp) and [FastAPI Template](https://github.com/idashevskii/fastapi-postgres-template)
+
+
 ## Deploy to Production
 
 Generate DH params
