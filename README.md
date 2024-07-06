@@ -31,7 +31,7 @@ https://t.me/rustore_manager_bot
 ## Admin Page
 https://cp-24-skfo.open-core.ru/admin
 
-![img_1.png](img_1.png)
+![img.png](img.png)
 ## User Page
 https://cp-24-skfo.open-core.ru/ui
 
@@ -39,4 +39,4 @@ https://cp-24-skfo.open-core.ru/ui
 
 ## Architecture
 
-![img_2.png](img_2.png)
+![img_1.png](img_1.png)
