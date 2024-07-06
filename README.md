@@ -34,6 +34,7 @@ Run services in prod mode:
 
 ---
 ## Прозрачность решения
+
 https://github.com/bukhanka/cp-24-skfo-gen_ans_eval
 ---
 ## Automatic Parser
