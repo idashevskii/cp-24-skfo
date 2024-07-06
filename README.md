@@ -22,6 +22,8 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
+## Прозрачность кода
+
 ## Automatic Parser
 Репозиторий: https://github.com/Nizier193/cp-24-skfo-parser
 
