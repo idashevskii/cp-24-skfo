@@ -55,7 +55,9 @@ export function ChatSources({ data }: { data: SourceData }) {
 
   const links=sources.map((nodeInfo: NodeInfo, index: number) => {
     if (nodeInfo.document_url){
-      return <a className="underline" target="_blank" href={nodeInfo.document_url}>{nodeInfo.document_title||nodeInfo.document_url}</a>
+      return <div className="mb-1 ml-0 text-sm">
+        <a className="underline" target="_blank" href={nodeInfo.document_url}>{nodeInfo.document_title||nodeInfo.document_url}</a>
+      </div>
     }
     return null;
   }).filter(e=>e)
@@ -91,7 +93,7 @@ export function ChatSources({ data }: { data: SourceData }) {
           })}
         </div>
       </div>
-      {links.length ? <div className="mb-1 ml-0 text-sm">{links}</div> : undefined}
+      {links.length ? links : undefined}
     </div>
   );
 }
