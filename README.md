@@ -1,14 +1,5 @@
 Based on [RAGapp](https://github.com/ragapp/ragapp) and [FastAPI Template](https://github.com/idashevskii/fastapi-postgres-template)
 
-## Local Development
-
-Copy file `.env.example` to `.env` and adjust configuration.
-
-Run:
-
-```bash
-docker compose up -d --build
-```
 
 ## Deploy to Production
 
@@ -31,3 +22,16 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
+
+## Admin Page
+https://cp-24-skfo.open-core.ru/admin
+
+![img_1.png](img_1.png)
+## User Page
+https://cp-24-skfo.open-core.ru/ui
+
+![img.png](img.png)
+
+## Architecture
+
+![img_2.png](img_2.png)
