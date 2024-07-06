@@ -1,14 +1,5 @@
 Based on [RAGapp](https://github.com/ragapp/ragapp) and [FastAPI Template](https://github.com/idashevskii/fastapi-postgres-template)
 
-## Local Development
-
-Copy file `.env.example` to `.env` and adjust configuration.
-
-Run:
-
-```bash
-docker compose up -d --build
-```
 
 ## Deploy to Production
 
