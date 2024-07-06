@@ -31,24 +31,50 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
+
+---
 ## Прозрачность решения
 
+https://github.com/bukhanka/cp-24-skfo-gen_ans_eval
+---
 ## Automatic Parser
+Реализована возможность автоматического парсинга официальной документации.
+Принцип, схема и код находятся в репозитории ниже.
+
 Репозиторий: https://github.com/Nizier193/cp-24-skfo-parser
 
+---
 ## TgBot
+Помимо веб-интерфейса, реализован телеграм бот, к которому может получить доступ человек, обладающий Telegram всего за несколько шагов.
+Реализация на PytelegrambotApi. Код, схема и прочее прописаны в репозитории ниже.
+
 Демо: https://t.me/rustore_manager_bot
 
 Репозиторий: https://github.com/Nizier193/cp-24-skfo-tg-bot
 
+---
 ## Admin Page
+Реализована админ-панель, с помощью которой конфигурируется поведение системы.
+
+Можно изменять такие параметры, как:
+* Модель
+* Системный промпт
+* Агенты
+* Наводящие вопросы
+* Документы системы
+
 Демо: https://cp-24-skfo.open-core.ru/admin
 
 ![img_1.png](docs/images/img_1.png)
+
+---
+
 ## User Page
 Демо: https://cp-24-skfo.open-core.ru/ui
 
 ![img.png](docs/images/img.png)
+
+---
 
 ## Architecture
 
