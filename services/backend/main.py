@@ -18,7 +18,10 @@ from src.routers.management.loader import loader_router
 from src.models.model_config import ModelConfig
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(
+    docs_url="/api/docs",
+    openapi_url="/api/openapi.json",
+)
 init_settings()
 
 environment = os.getenv("ENVIRONMENT")
@@ -37,18 +40,6 @@ app.include_router(config_router, prefix="/api/management/config")
 app.include_router(tools_router, prefix="/api/management/tools", tags=["Agent"])
 app.include_router(files_router, prefix="/api/management/files", tags=["Knowledge"])
 app.include_router(loader_router, prefix="/api/management/loader", tags=["Knowledge"])
-
-
-@app.get("/")
-async def redirect():
-    config = ModelConfig.get_config()
-    if config.configured:
-        # system is configured - / points to chat UI
-        return FileResponse("static/index.html")
-    else:
-        # system is not configured - redirect to onboarding page
-        return RedirectResponse(url="/admin/#new")
-
 
 # Mount the data files to serve the file viewer
 app.mount(

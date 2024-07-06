@@ -21,6 +21,7 @@ import { ChatSources } from "./chat-sources";
 import ChatTools from "./chat-tools";
 import CsvContent from "./csv-content";
 import Markdown from "./markdown";
+import ChatCallOperator from "./chat-call-operator";
 
 type ContentDisplayConfig = {
   order: number;
@@ -85,6 +86,10 @@ function ChatMessageContent({
     {
       order: 3,
       component: sourceData[0] ? <ChatSources data={sourceData[0]} /> : null,
+    },
+    {
+      order: 4,
+      component: <ChatCallOperator content={message.content} />,
     },
   ];
 

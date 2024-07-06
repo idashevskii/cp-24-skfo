@@ -51,6 +51,14 @@ export const supportedProviders = [
     value: "azure-openai",
   },
   {
+    name: "YandexGPT",
+    value: "yandex",
+  },
+  {
+    name: "GigaChat",
+    value: "sber",
+  },
+  {
     name: "Groq",
     value: "groq",
   },
