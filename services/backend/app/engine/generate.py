@@ -1,7 +1,7 @@
 from copy import deepcopy
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List, Sequence, cast
 from dotenv import load_dotenv
-from llama_index.core.schema import BaseNode, TransformComponent
+from llama_index.core.schema import BaseNode, TextNode, TransformComponent
 
 load_dotenv()
 
@@ -32,13 +32,34 @@ def get_doc_store():
     else:
         return SimpleDocumentStore()
 
+
 class UrlMetadataExtractor(TransformComponent):
-    
+
+    def extract_headers(self, text: str):
+        lines = text.split("\n", maxsplit=10)
+        res_text = []
+        res_meta = {}
+        for line in lines:
+            line_consumed = False
+            for doc_key, meta_key in [
+                ("url", "document_url"),
+                ("title", "document_title"),
+            ]:
+                prefix = f"{doc_key}:"
+                if line.startswith(prefix):
+                    res_meta[meta_key] = line.removeprefix(prefix).strip()
+                    line_consumed = True
+                    break
+            if line_consumed:
+                continue
+            res_text.append(line)
+
+        return "\n".join(res_text).strip(), res_meta
+
     def extract_metadata(self, node: BaseNode):
-        node.metadata.update({
-            "document_url": "http://test-url.com",
-            "document_title": "My Test Document",
-        })
+        if isinstance(node, TextNode):
+            node.text, headers = self.extract_headers(cast(TextNode, node).text)
+            node.metadata.update(headers)
         return node
 
     def __call__(self, nodes: List[BaseNode], **kwargs: Any) -> List[BaseNode]:
