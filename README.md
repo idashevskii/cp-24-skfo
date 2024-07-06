@@ -22,6 +22,11 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
+## Automatic Parser
+https://github.com/Nizier193/05-07-Hackatone-Parser
+
+## TgBot
+https://t.me/rustore_manager_bot
 
 ## Admin Page
 https://cp-24-skfo.open-core.ru/admin
