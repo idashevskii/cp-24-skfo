@@ -1,5 +1,14 @@
 Based on [RAGapp](https://github.com/ragapp/ragapp) and [FastAPI Template](https://github.com/idashevskii/fastapi-postgres-template)
 
+## Local Development
+
+Copy file `.env.example` to `.env` and adjust configuration.
+
+Run:
+
+```bash
+docker compose up -d --build
+```
 
 ## Deploy to Production
 
@@ -22,7 +31,7 @@ Run services in prod mode:
 ```bash
 ./bin/prod-run.sh
 ```
-## Прозрачность кода
+## Прозрачность решения
 
 ## Automatic Parser
 Репозиторий: https://github.com/Nizier193/cp-24-skfo-parser
