@@ -56,9 +56,10 @@ services:
       network: host
     restart: always
     volumes:
-      - backend-data:/app/data
+      - backend-files:/app/data
+      - backend-storage:/storage
     environment:
-      - STORAGE_DIR=/app/data/context
+      - STORAGE_DIR=/storage/context
       - OPENAI_BASE_URL=$OPENAI_BASE_URL
       - OPENAI_API_BASE=$OPENAI_BASE_URL
       - VECTOR_STORE_PROVIDER=qdrant
@@ -120,7 +121,8 @@ networks:
 
 volumes:
   qdrant_data:
-  backend-data:
+  backend-files:
+  backend-storage:
   certbot-dist:
   certbot-www:
   postgres-data:

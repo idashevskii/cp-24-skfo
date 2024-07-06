@@ -34,6 +34,8 @@ export type SourceNode = {
   score?: number;
   text: string;
   url?: string;
+  document_url?: string;
+  document_title?: string;
 };
 
 export type SourceData = {

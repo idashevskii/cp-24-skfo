@@ -1,11 +1,14 @@
+from copy import deepcopy
+from typing import Any, Dict, List, Sequence
 from dotenv import load_dotenv
+from llama_index.core.schema import BaseNode, TransformComponent
 
 load_dotenv()
 
 import os
 import logging
 from llama_index.core.settings import Settings
-from llama_index.core.ingestion import IngestionPipeline
+from llama_index.core.ingestion import DocstoreStrategy, IngestionPipeline
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.storage.docstore import SimpleDocumentStore
 from llama_index.core.storage import StorageContext
@@ -29,10 +32,23 @@ def get_doc_store():
     else:
         return SimpleDocumentStore()
 
+class UrlMetadataExtractor(TransformComponent):
+    
+    def extract_metadata(self, node: BaseNode):
+        node.metadata.update({
+            "document_url": "http://test-url.com",
+            "document_title": "My Test Document",
+        })
+        return node
+
+    def __call__(self, nodes: List[BaseNode], **kwargs: Any) -> List[BaseNode]:
+        return [deepcopy(self.extract_metadata(node)) for node in nodes]
+
 
 def run_pipeline(docstore, vector_store, documents):
     pipeline = IngestionPipeline(
         transformations=[
+            UrlMetadataExtractor(),
             SentenceSplitter(
                 chunk_size=Settings.chunk_size,
                 chunk_overlap=Settings.chunk_overlap,
@@ -40,7 +56,7 @@ def run_pipeline(docstore, vector_store, documents):
             Settings.embed_model,
         ],
         docstore=docstore,
-        docstore_strategy="upserts_and_delete",
+        docstore_strategy=DocstoreStrategy.UPSERTS_AND_DELETE,
         vector_store=vector_store,
     )
 

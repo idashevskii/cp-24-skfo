@@ -23,6 +23,8 @@ function SourceNumberButton({ index }: { index: number }) {
 type NodeInfo = {
   id: string;
   url?: string;
+  document_url?: string;
+  document_title?: string;
 };
 
 export function ChatSources({ data }: { data: SourceData }) {
@@ -37,6 +39,8 @@ export function ChatSources({ data }: { data: SourceData }) {
         const nodeInfo = {
           id: node.id,
           url: node.url,
+          document_url: node.metadata?.document_url as string|undefined,
+          document_title: node.metadata?.document_title as string|undefined,
         };
         const key = nodeInfo.url ?? nodeInfo.id; // use id as key for UNKNOWN type
         if (!nodesByPath[key]) {
@@ -49,35 +53,45 @@ export function ChatSources({ data }: { data: SourceData }) {
 
   if (sources.length === 0) return null;
 
+  const links=sources.map((nodeInfo: NodeInfo, index: number) => {
+    if (nodeInfo.document_url){
+      return <a className="underline" target="_blank" href={nodeInfo.document_url}>{nodeInfo.document_title||nodeInfo.document_url}</a>
+    }
+    return null;
+  }).filter(e=>e)
+
   return (
-    <div className="space-x-2 text-sm">
-      <span className="font-semibold">Sources:</span>
-      <div className="inline-flex gap-1 items-center">
-        {sources.map((nodeInfo: NodeInfo, index: number) => {
-          if (nodeInfo.url?.endsWith(".pdf")) {
+    <div>
+      <div className="space-x-2 text-sm">
+        <span className="font-semibold">Источники:</span>
+        <div className="inline-flex gap-1 items-center">
+          {sources.map((nodeInfo: NodeInfo, index: number) => {
+            if (nodeInfo.url?.endsWith(".pdf")) {
+              return (
+                <PdfDialog
+                  key={nodeInfo.id}
+                  documentId={nodeInfo.id}
+                  url={nodeInfo.url!}
+                  trigger={<SourceNumberButton index={index} />}
+                />
+              );
+            }
             return (
-              <PdfDialog
-                key={nodeInfo.id}
-                documentId={nodeInfo.id}
-                url={nodeInfo.url!}
-                trigger={<SourceNumberButton index={index} />}
-              />
+              <div key={nodeInfo.id}>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <SourceNumberButton index={index} />
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-[320px]">
+                    <NodeInfo nodeInfo={nodeInfo} />
+                  </HoverCardContent>
+                </HoverCard>
+              </div>
             );
-          }
-          return (
-            <div key={nodeInfo.id}>
-              <HoverCard>
-                <HoverCardTrigger>
-                  <SourceNumberButton index={index} />
-                </HoverCardTrigger>
-                <HoverCardContent className="w-[320px]">
-                  <NodeInfo nodeInfo={nodeInfo} />
-                </HoverCardContent>
-              </HoverCard>
-            </div>
-          );
-        })}
+          })}
+        </div>
       </div>
+      {links.length ? <div className="mb-1 ml-0 text-sm">{links}</div> : undefined}
     </div>
   );
 }
