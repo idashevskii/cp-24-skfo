@@ -32,7 +32,7 @@ services:
     logging: *logging
     networks:
       default:
-        ipv4_address: "172.25.1.101"
+        ipv4_address: "172.22.1.101"
     environment:
       - API_BASE_URI=$API_BASE_URI
 
@@ -46,7 +46,7 @@ services:
     logging: *logging
     networks:
       default:
-        ipv4_address: "172.25.1.102"
+        ipv4_address: "172.22.1.102"
     environment:
       - API_BASE_URI=$API_BASE_URI
 
@@ -58,11 +58,12 @@ services:
     volumes:
       - backend-data:/app/data
     environment:
+      - STORAGE_DIR=/app/data/context
       - OPENAI_BASE_URL=$OPENAI_BASE_URL
       - OPENAI_API_BASE=$OPENAI_API_BASE
       - VECTOR_STORE_PROVIDER=qdrant
       - QDRANT_URL=$QDRANT_URL
-      - QDRANT_COLLECTION=default
+      - QDRANT_COLLECTION=$QDRANT_COLLECTION_NAME
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
     depends_on:
@@ -70,7 +71,7 @@ services:
     logging: *logging
     networks:
       default:
-        ipv4_address: "172.25.1.103"
+        ipv4_address: "172.22.1.103"
 
   setup:
     image: curlimages/curl:8.8.0
@@ -78,16 +79,13 @@ services:
     volumes:
       - ./scripts:/ragapp
     environment:
-      - MODEL=${MODEL:-phi3:latest}
-      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://ollama:11434}
       - QDRANT_URL=$QDRANT_URL
-      - COLLECTION_NAME=default
+      - COLLECTION_NAME=$QDRANT_COLLECTION_NAME
       - DISTANCE_METRIC=Cosine
       - VECTOR_SIZE=768
-    command: >
-      /bin/sh -c 
-      "/ragapp/create_qdrant_collection.sh &&
-      /ragapp/setup_ollama.sh"
+    command: /ragapp/create_qdrant_collection.sh
+    depends_on:
+      - qdrant
 
   certbot:
     restart: always
@@ -102,16 +100,26 @@ services:
       - CERT_MODE=prod
     logging: *logging
 
+  qdrant:
+    image: qdrant/qdrant:v1.10.0
+    restart: always
+    ports:
+      - $INTRANET_IP:6333:6333
+      - $INTRANET_IP:6334:6334
+    logging: *logging
+    volumes:
+      - "qdrant_data:/qdrant/storage:z"
 
 networks:
   default:
     ipam:
       driver: default
       config:
-        - subnet: "172.25.0.0/16"
-          gateway: "172.25.0.1"
+        - subnet: "172.22.0.0/16"
+          gateway: "172.22.0.1"
 
 volumes:
+  qdrant_data:
   backend-data:
   certbot-dist:
   certbot-www:
