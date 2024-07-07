@@ -5,6 +5,8 @@ import { DEFAULT_GEMINI_CONFIG, GeminiConfigSchema } from "./gemini";
 import { DEFAULT_GROQ_CONFIG, GroqConfigSchema } from "./groq";
 import { DEFAULT_OLLAMA_CONFIG, OllamaConfigSchema } from "./ollama";
 import { DEFAULT_OPENAI_CONFIG, OpenAIConfigSchema } from "./openai";
+import { DEFAULT_GIGACHAT_CONFIG, GigaChatConfigSchema } from "./gigachat";
+import { DEFAULT_YANDEXGPT_CONFIG, YandexGPTConfigSchema } from "./yandexgpt";
 
 export const ModelConfigSchema = z
   .union([
@@ -13,6 +15,8 @@ export const ModelConfigSchema = z
     OllamaConfigSchema,
     AzureOpenAIConfigSchema,
     GroqConfigSchema,
+    GigaChatConfigSchema,
+    YandexGPTConfigSchema,
   ])
   .refine((data) => {
     switch (data.model_provider) {
@@ -26,6 +30,10 @@ export const ModelConfigSchema = z
         return AzureOpenAIConfigSchema.parse(data);
       case "groq":
         return GroqConfigSchema.parse(data);
+      case "gigachat":
+        return GigaChatConfigSchema.parse(data);
+      case "yandexgpt":
+        return YandexGPTConfigSchema.parse(data);
       default:
         return true;
     }
@@ -51,16 +59,16 @@ export const supportedProviders = [
     value: "azure-openai",
   },
   {
+    name: "Groq",
+    value: "groq",
+  },
+  {
     name: "YandexGPT",
-    value: "yandex",
+    value: "yandexgpt",
   },
   {
     name: "GigaChat",
-    value: "sber",
-  },
-  {
-    name: "Groq",
-    value: "groq",
+    value: "gigachat",
   },
 ];
 
@@ -76,6 +84,10 @@ export const getDefaultProviderConfig = (provider: string) => {
       return DEFAULT_AZURE_OPENAI_CONFIG;
     case "groq":
       return DEFAULT_GROQ_CONFIG;
+    case "gigachat":
+      return DEFAULT_GIGACHAT_CONFIG;
+    case "yandexgpt":
+      return DEFAULT_YANDEXGPT_CONFIG;
     default:
       throw new Error(`Provider ${provider} not supported`);
   }

@@ -31,6 +31,8 @@ import { GeminiForm } from "./providers/gemini";
 import { GroqForm } from "./providers/groq";
 import { OllamaForm } from "./providers/ollama";
 import { OpenAIForm } from "./providers/openai";
+import { GigaChatForm } from "./providers/gigachat";
+import { YandexGPTForm } from "./providers/yandexgpt";
 
 export const ModelConfig = ({
   sectionTitle,
@@ -106,6 +108,10 @@ export const ModelConfig = ({
         return <GeminiForm form={form} defaultValues={defaultValues} />;
       case "azure-openai":
         return <AzureOpenAIForm form={form} defaultValues={defaultValues} />;
+      case "gigachat":
+        return <GigaChatForm form={form} defaultValues={defaultValues} />;
+      case "yandexgpt":
+        return <YandexGPTForm form={form} defaultValues={defaultValues} />;
       default:
         return null;
     }
@@ -136,7 +142,7 @@ export const ModelConfig = ({
             name="model_provider"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Model Provider <b>(Intercepted)</b></FormLabel>
+                <FormLabel>Model Provider</FormLabel>
                 <FormControl>
                   <Select
                     defaultValue={form.getValues().model_provider ?? "openai"}
