@@ -56,8 +56,8 @@ services:
       network: host
     restart: always
     volumes:
-      - backend-opeani-files:/app/data
-      - backend-opeani-storage:/storage
+      - backend-files:/app/data
+      - backend-storage:/storage
     environment:
       - EMBEDDING_DIM=$VECTOR_SIZE
       - STORAGE_DIR=/storage/context
@@ -122,10 +122,8 @@ networks:
 
 volumes:
   qdrant_data:
-  # backend-files:
-  # backend-storage:
-  backend-opeani-files:
-  backend-opeani-storage:
+  backend-files:
+  backend-storage:
   certbot-dist:
   certbot-www:
   postgres-data:
