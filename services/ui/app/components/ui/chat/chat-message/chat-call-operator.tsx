@@ -1,7 +1,7 @@
 import { Button } from "../../button";
 
 const normalize=(text: string)=>{
-  return text.replaceAll(/\W/g, '').toLocaleLowerCase()
+  return text.replaceAll(/[$&+,:;=?@#|'"<>.^*()%!\s-]/g, '').toLocaleLowerCase()
 }
 
 const keywords=[
