@@ -56,9 +56,10 @@ services:
       network: host
     restart: always
     volumes:
-      - backend-files:/app/data
-      - backend-storage:/storage
+      - backend-opeani-files:/app/data
+      - backend-opeani-storage:/storage
     environment:
+      - EMBEDDING_DIM=$VECTOR_SIZE
       - STORAGE_DIR=/storage/context
       - OPENAI_BASE_URL=$OPENAI_BASE_URL
       - OPENAI_API_BASE=$OPENAI_BASE_URL
@@ -83,7 +84,7 @@ services:
       - QDRANT_URL=$QDRANT_URL
       - COLLECTION_NAME=$QDRANT_COLLECTION_NAME
       - DISTANCE_METRIC=Cosine
-      - VECTOR_SIZE=768
+      - VECTOR_SIZE=$VECTOR_SIZE
     command: /ragapp/create_qdrant_collection.sh
     depends_on:
       - qdrant
@@ -121,8 +122,10 @@ networks:
 
 volumes:
   qdrant_data:
-  backend-files:
-  backend-storage:
+  # backend-files:
+  # backend-storage:
+  backend-opeani-files:
+  backend-opeani-storage:
   certbot-dist:
   certbot-www:
   postgres-data:
