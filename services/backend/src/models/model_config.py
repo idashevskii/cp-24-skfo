@@ -68,6 +68,30 @@ class AzureOpenAIConfig(BaseModel):
         env="AZURE_OPENAI_EMBEDDING_DEPLOYMENT",
     )
 
+class YandexGPTConfig(BaseModel):
+    yandexgpt_folder_id: str | None = Field(
+        default=None,
+        description="YandexGPT Folder ID to use",
+        env="YANDEXGPT_FOLDER_ID",
+    )
+    yandexgpt_iam_token: str | None = Field(
+        default=None,
+        description="YandexGPT IAM Token to use",
+        env="YANDEXGPT_IAM_TOKEN",
+    )
+
+class GigaChatConfig(BaseModel):
+    gigachat_client_id: str | None = Field(
+        default=None,
+        description="GigaChat Client ID to use",
+        env="GIGACHAT_CLIENT_ID",
+    )
+    gigachat_client_secret: str | None = Field(
+        default=None,
+        description="GigaChat Client Secret to use",
+        env="GIGACHAT_CLIENT_SECRET",
+    )
+
 
 # We're using inheritance to flatten all the fields into a single class
 # Todo: Refactor API to nested structure
@@ -78,6 +102,8 @@ class ModelConfig(
     GeminiConfig,
     OllamaConfig,
     AzureOpenAIConfig,
+    YandexGPTConfig,
+    GigaChatConfig,
 ):
     model_provider: str | None = Field(
         default=None,
@@ -119,6 +145,10 @@ class ModelConfig(
             return True
         elif self.model_provider == "groq":
             return self.groq_api_key is not None
+        elif self.model_provider == "yandexgpt":
+            return self.yandexgpt_iam_token is not None
+        elif self.model_provider == "gigachat":
+            return self.gigachat_client_secret is not None
         return False
 
     @classmethod

@@ -19,6 +19,10 @@ def init_settings():
             init_gemini()
         case "azure-openai":
             init_azure_openai()
+        case "gigachat":
+            init_gigachat()
+        case "yandexgpt":
+            init_yandexgpt()
         case _:
             raise ValueError(f"Invalid model provider: {model_provider}")
     Settings.chunk_size = int(os.getenv("CHUNK_SIZE", "1024"))
@@ -41,6 +45,58 @@ def init_ollama():
         base_url=base_url, model=os.getenv("MODEL"), request_timeout=request_timeout
     )
 
+def init_gigachat():
+    from llama_index.core.constants import DEFAULT_TEMPERATURE
+    from llama_index.embeddings.openai import OpenAIEmbedding
+    from llama_index.llms.openai import OpenAI
+    
+    class GigaChat(OpenAI):
+        ...
+    
+    class GigaChatEmbedding(OpenAIEmbedding):
+        ...
+
+    max_tokens = os.getenv("LLM_MAX_TOKENS")
+    config = {
+        "model": os.getenv("MODEL"),
+        "temperature": float(os.getenv("LLM_TEMPERATURE", DEFAULT_TEMPERATURE)),
+        "max_tokens": int(max_tokens) if max_tokens is not None else None,
+    }
+    Settings.llm = GigaChat(**config)
+
+    dimensions = os.getenv("EMBEDDING_DIM")
+    config = {
+        "model": os.getenv("EMBEDDING_MODEL"),
+        "dimensions": int(dimensions) if dimensions is not None else None,
+    }
+    Settings.embed_model = GigaChatEmbedding(**config)
+
+
+def init_yandexgpt():
+    from llama_index.core.constants import DEFAULT_TEMPERATURE
+    from llama_index.embeddings.openai import OpenAIEmbedding
+    from llama_index.llms.openai import OpenAI
+    
+    class YandexGPT(OpenAI):
+        ...
+    
+    class YandexGPTEmbedding(OpenAIEmbedding):
+        ...
+
+    max_tokens = os.getenv("LLM_MAX_TOKENS")
+    config = {
+        "model": os.getenv("MODEL"),
+        "temperature": float(os.getenv("LLM_TEMPERATURE", DEFAULT_TEMPERATURE)),
+        "max_tokens": int(max_tokens) if max_tokens is not None else None,
+    }
+    Settings.llm = YandexGPT(**config)
+
+    dimensions = os.getenv("EMBEDDING_DIM")
+    config = {
+        "model": os.getenv("EMBEDDING_MODEL"),
+        "dimensions": int(dimensions) if dimensions is not None else None,
+    }
+    Settings.embed_model = YandexGPTEmbedding(**config)
 
 def init_openai():
     from llama_index.core.constants import DEFAULT_TEMPERATURE
