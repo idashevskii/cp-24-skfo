@@ -23,6 +23,26 @@ import CsvContent from "./csv-content";
 import Markdown from "./markdown";
 import ChatCallOperator from "./chat-call-operator";
 
+const normalize=(text: string)=>{
+  return text.replaceAll(/[$&+,:;=?@#|'"<>.^*()%!\s-]/g, '').toLocaleLowerCase()
+}
+
+const keywords=[
+  'i dont have any',
+  'я не знаю',
+  'в службу поддержки',
+  'i dont know',
+  'does not provide a specific',
+].map(normalize);
+
+const hasNoAnswer=(content: string)=>{
+  if(!content){
+    return false;
+  }
+  const normContent=normalize(content)
+  return keywords.some(keyword=>normContent.includes(keyword))
+}
+
 type ContentDisplayConfig = {
   order: number;
   component: JSX.Element | null;
@@ -59,6 +79,8 @@ function ChatMessageContent({
     MessageAnnotationType.TOOLS,
   );
 
+  const hasNoAnswerFlag=hasNoAnswer(message.content)
+
   const contents: ContentDisplayConfig[] = [
     {
       order: 1,
@@ -85,11 +107,11 @@ function ChatMessageContent({
     },
     {
       order: 3,
-      component: sourceData[0] ? <ChatSources data={sourceData[0]} /> : null,
+      component: !hasNoAnswerFlag && sourceData[0] ? <ChatSources data={sourceData[0]} /> : null,
     },
     {
       order: 4,
-      component: <ChatCallOperator content={message.content} />,
+      component: hasNoAnswerFlag ? <ChatCallOperator content={message.content} /> : null,
     },
   ];
 
